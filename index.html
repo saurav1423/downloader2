@@ -99,7 +99,7 @@
             var link = document.getElementById("videoLink").value
             var op = document.getElementById("quality").value
 
-            fetch("https://iridescent-semolina-152a7b.netlify.app/api/call-external-api", {
+            fetch("/api/call-external-api", {
                 method: "POST",
                 body: JSON.stringify({ "url": link }),
                 headers: {
