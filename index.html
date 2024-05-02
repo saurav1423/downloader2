@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader</title>
+    <style>
+        #content {
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 10vh;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #btndiv{
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto !important;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #progress {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1>Video Downloader</h1>
+        <label for="videoLink">Enter Video Link:</label>
+        <input type="text" id="videoLink"></br>
+        <label for="quality">Select Quality:</label>
+        <select id="quality">
+            <option value="a">Fast Download</option>
+            <option value="b">HD Video</option>
+        </select></div></br>
+        <div id="btndiv">
+            <button onclick="downloadVideo()" id="btn">Download</button>
+        </div>
+        <div id="progress"></div>
+    </div>
+
+  <script>
+
+        function download(videoUrl) {
+            const a = document.createElement('a');
+            a.href = videoUrl;
+            a.download = 'video.mp4'; 
+            document.body.appendChild(a);
+            a.click(); 
+            document.body.removeChild(a); 
+        }
+
+        async function downloadVideo() {
+            var link = document.getElementById("videoLink").value
+            var op = document.getElementById("quality").value
+
+            fetch("https://iridescent-semolina-152a7b.netlify.app/api/call-external-api", {
+                method: "POST",
+                body: JSON.stringify({ "url": link }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                console.log(data.response[0].resolutions)
+                let temp = data.response[0].resolutions
+                console.log(temp["Fast Download"])
+                if(op == "a"){
+                    download(temp["Fast Download"])
+                }
+                else if(op == "b"){
+                    download(temp["HD Video"])
+                }
+                else{
+                    download(temp["Fast Download"])
+                }
+            })
+        }
+ </script>
+</body>
+</html>
